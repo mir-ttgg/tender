@@ -114,7 +114,6 @@ class Tender2TemplateFavorite(Base):
     template_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey('templates.id', ondelete='CASCADE'), primary_key=True
     )
-    is_favorite: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False, server_default='true')
     score: Mapped[int | None] = mapped_column(Integer, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 

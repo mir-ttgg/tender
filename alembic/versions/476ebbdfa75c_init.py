@@ -87,7 +87,6 @@ def upgrade() -> None:
     op.create_table('tender2template_favorites',
     sa.Column('tender_id', sa.Integer(), nullable=False),
     sa.Column('template_id', sa.UUID(), nullable=False),
-    sa.Column('is_favorite', sa.Boolean(), server_default='true', nullable=False),
     sa.Column('score', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['template_id'], ['templates.id'], ondelete='CASCADE'),

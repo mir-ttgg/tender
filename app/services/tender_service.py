@@ -68,20 +68,15 @@ async def list_tenders(
     user_id: int,
     template_id: UUID,
     page: int,
-    is_favorite: bool | None,
 ) -> TenderListResponse:
     template = await _ensure_template_owned(session, template_id, user_id)
 
     page = max(page, 1)
 
-    base_filters = [Tender2TemplateFavorite.template_id == template_id]
-    if is_favorite is not None:
-        base_filters.append(Tender2TemplateFavorite.is_favorite.is_(is_favorite))
-
     total = await session.scalar(
         select(func.count())
         .select_from(Tender2TemplateFavorite)
-        .where(*base_filters)
+        .where(Tender2TemplateFavorite.template_id == template_id)
     ) or 0
     pages = max((total + PER_PAGE - 1) // PER_PAGE, 1)
 
@@ -89,7 +84,7 @@ async def list_tenders(
         await session.execute(
             select(Tender, Tender2TemplateFavorite.score)
             .join(Tender2TemplateFavorite, Tender2TemplateFavorite.tender_id == Tender.id)
-            .where(*base_filters)
+            .where(Tender2TemplateFavorite.template_id == template_id)
             .order_by(Tender.id.desc())
             .offset((page - 1) * PER_PAGE)
             .limit(PER_PAGE)

@@ -19,10 +19,9 @@ async def list_tenders(
     session: DbSession,
     template_id: UUID = Query(...),
     page: int = Query(default=1, ge=0),
-    is_favorite: bool | None = Query(default=None),
 ) -> TenderListResponse:
     return await tender_service.list_tenders(
-        session, user.id, template_id, page, is_favorite
+        session, user.id, template_id, page
     )
 
 
